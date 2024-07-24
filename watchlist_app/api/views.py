@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from watchlist_app.models import WatchList, StreamPlatform
-from watchlist_app.api.serializers import WatchSerializer, StreamPlatformSerializer
+from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer
 from rest_framework import status
 
 # for class base view
@@ -55,11 +55,11 @@ class WatchListAV(APIView):
 
     def get(self, request):
         movies = WatchList.objects.all()
-        serializer = WatchSerializer(movies, many=True) # ek se ziuda object ho toh
+        serializer = WatchListSerializer(movies, many=True) # ek se ziuda object ho toh
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = WatchSerializer(data=request.data)
+        serializer = WatchListSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -75,13 +75,13 @@ class WatchDetailAV(APIView):
             movie = WatchList.objects.get(pk=pk)
         except WatchList.DoesNotExist:
             return Response({'error' : 'Movie Does not Found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = WatchSerializer(movie)
+        serializer = WatchListSerializer(movie)
         return Response(serializer.data)
 
 
     def put(self, request, pk):
         movie = WatchList.objects.get(pk=pk)
-        serializer = WatchSerializer(movie, data=request.data)
+        serializer = WatchListSerializer(movie, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
